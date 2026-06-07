@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch('./config.json')
         .then(response => response.json())
         .then(data => {
-            // 1. Handle all standard text injections (e.g., doctor.name, doctor.about)
             const injectors = document.querySelectorAll('[data-inject]');
             injectors.forEach(element => {
                 const path = element.getAttribute('data-inject');
@@ -17,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     element.textContent = value;
                 }
             });
+        })
+        .catch(error => console.error('Error loading config:', error));
+});
 
             // 2. Handle the Services Carousel layout generation
             const servicesWrapper = document.getElementById('carousel-wrapper') || document.querySelector('.relative.h-48');
