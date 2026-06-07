@@ -1,0 +1,45 @@
+/* ---------------------------------------------------------------
+ *  Carousel
+ * ------------------------------------------------------------ */
+#carousel-slides {
+  will-change: transform;
+}
+
+.carousel-dot.active-dot {
+  background-color: #fff;
+  width: 0.75rem;
+}
+
+/* ---------------------------------------------------------------
+ *  Form / input overrides
+ * ------------------------------------------------------------ */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 0;
+}
+
+/* ---------------------------------------------------------------
+ *  Smooth fade for injected content
+ * ------------------------------------------------------------ */
+[data-inject] {
+  transition: opacity 0.2s ease;
+}
+
+/* ---------------------------------------------------------------
+ *  Scroll behaviour for sticky nav offset
+ * ------------------------------------------------------------ */
+html {
+  scroll-padding-top: 5rem;
+}
+
+/* ---------------------------------------------------------------
+ *  Print friendly
+ * ------------------------------------------------------------ */
+@media print {
+  nav { display: none; }
+  #carousel-prev,
+  #carousel-next,
+  #carousel-dots { display: none; }
+}

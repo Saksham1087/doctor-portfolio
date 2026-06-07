@@ -1,0 +1,207 @@
+(function () {
+  'use strict';
+
+  /* ---------------------------------------------------------------
+   *  STATE
+   * ------------------------------------------------------------ */
+  let data = null;
+  let carouselIndex = 0;
+  let autoSlide = null;
+
+  /* ---------------------------------------------------------------
+   *  DATA INJECTION — walks the DOM for [data-inject] attributes
+   * ------------------------------------------------------------ */
+  function resolvePath(obj, path) {
+    return path.split('.').reduce((acc, key) => (acc != null ? acc[key] : undefined), obj);
+  }
+
+  function injectAll() {
+    document.querySelectorAll('[data-inject]').forEach(el => {
+      const path = el.getAttribute('data-inject');
+      const value = resolvePath(data, path);
+      if (value !== undefined && value !== null) {
+        if (Array.isArray(value)) {
+          el.textContent = value.join(', ');
+        } else {
+          el.textContent = value;
+        }
+      }
+    });
+
+    document.title = data.doctor.name + ' — ' + data.doctor.title;
+  }
+
+  /* ---------------------------------------------------------------
+   *  SERVICES CARDS
+   * ------------------------------------------------------------ */
+  function buildServiceCards() {
+    const grid = document.getElementById('services-grid');
+    if (!grid || !data.services) return;
+
+    grid.innerHTML = data.services.map(s => `
+      <div class="group bg-white rounded-2xl p-7 border border-gray-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 group-hover:bg-indigo-100 flex items-center justify-center text-indigo-700 text-xl mb-5 transition-colors">
+          <i class="fas ${s.icon}"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">${s.title}</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">${s.description}</p>
+      </div>
+    `).join('');
+  }
+
+  /* ---------------------------------------------------------------
+   *  ARTICLES CARDS
+   * ------------------------------------------------------------ */
+  function buildArticleCards() {
+    const grid = document.getElementById('articles-grid');
+    if (!grid || !data.articles) return;
+
+    const formatDate = (iso) => {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+    };
+
+    grid.innerHTML = data.articles.map(a => `
+      <a href="${a.url}" class="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300 flex flex-col overflow-hidden">
+        <div class="h-40 bg-gradient-to-br from-indigo-50 to-indigo-100 flex items-center justify-center">
+          <i class="fas fa-newspaper text-4xl text-indigo-300 group-hover:text-indigo-400 transition-colors"></i>
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <time class="text-xs text-gray-400 font-medium uppercase tracking-wider">${formatDate(a.date)}</time>
+          <h3 class="text-base font-bold text-gray-900 mt-1.5 mb-2 group-hover:text-indigo-700 transition-colors">${a.title}</h3>
+          <p class="text-sm text-gray-500 leading-relaxed flex-1">${a.excerpt}</p>
+          <span class="mt-4 text-indigo-700 text-sm font-semibold inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+            Read More <i class="fas fa-arrow-right text-xs"></i>
+          </span>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  /* ---------------------------------------------------------------
+   *  CAROUSEL — built from services[]
+   * ------------------------------------------------------------ */
+  function buildCarousel() {
+    const container = document.getElementById('carousel-slides');
+    const dotsContainer = document.getElementById('carousel-dots');
+    if (!container || !dotsContainer || !data.services) return;
+
+    const slides = data.services.map(s => `
+      <div class="min-w-full p-8 sm:p-10 flex flex-col items-center text-center">
+        <div class="w-16 h-16 bg-indigo-500/20 rounded-full flex items-center justify-center mb-5">
+          <i class="fas ${s.icon} text-3xl text-indigo-400"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-3">${s.title}</h3>
+        <p class="text-gray-300 max-w-md">${s.description}</p>
+      </div>
+    `).join('');
+
+    container.innerHTML = slides;
+
+    dotsContainer.innerHTML = data.services.map((_, i) => `
+      <button class="w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/70 transition-all carousel-dot${i === 0 ? ' active-dot' : ''}" data-index="${i}"></button>
+    `).join('');
+
+    carouselIndex = 0;
+    goToSlide(0);
+
+    /* Event listeners */
+    document.getElementById('carousel-prev').addEventListener('click', () => {
+      stopAuto();
+      prevSlide();
+    });
+    document.getElementById('carousel-next').addEventListener('click', () => {
+      stopAuto();
+      nextSlide();
+    });
+    dotsContainer.addEventListener('click', (e) => {
+      const dot = e.target.closest('.carousel-dot');
+      if (!dot) return;
+      stopAuto();
+      goToSlide(parseInt(dot.dataset.index, 10));
+    });
+
+    startAuto();
+  }
+
+  function goToSlide(index) {
+    const slides = document.getElementById('carousel-slides');
+    const dots = document.querySelectorAll('.carousel-dot');
+    if (!slides) return;
+
+    const total = slides.children.length;
+    carouselIndex = (index + total) % total;
+    slides.style.transform = `translateX(-${carouselIndex * 100}%)`;
+
+    dots.forEach((d, i) => {
+      d.classList.toggle('active-dot', i === carouselIndex);
+      d.classList.toggle('bg-white/40', i !== carouselIndex);
+      d.classList.toggle('bg-white', i === carouselIndex);
+      d.classList.toggle('w-3', i === carouselIndex);
+      d.classList.toggle('w-2.5', i !== carouselIndex);
+    });
+  }
+
+  function nextSlide() { goToSlide(carouselIndex + 1); }
+  function prevSlide() { goToSlide(carouselIndex - 1); }
+
+  function startAuto() {
+    stopAuto();
+    autoSlide = setInterval(nextSlide, 5000);
+  }
+
+  function stopAuto() {
+    if (autoSlide) { clearInterval(autoSlide); autoSlide = null; }
+  }
+
+  /* ---------------------------------------------------------------
+   *  APPINTMENT FORM (simple handler)
+   * ------------------------------------------------------------ */
+  function bindForm() {
+    const form = document.getElementById('appointment-form');
+    const success = document.getElementById('form-success');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('patient-name').value.trim();
+      const phone = document.getElementById('patient-phone').value.trim();
+
+      if (!name || !phone) {
+        alert('Please fill in your name and phone number.');
+        return;
+      }
+
+      form.reset();
+      success.classList.remove('hidden');
+
+      setTimeout(() => success.classList.add('hidden'), 5000);
+    });
+  }
+
+  /* ---------------------------------------------------------------
+   *  INIT
+   * ------------------------------------------------------------ */
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const res = await fetch('config.json');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+    } catch (err) {
+      console.error('Failed to load config.json:', err);
+
+      document.getElementById('hero')?.querySelector('h1')?.insertAdjacentHTML('afterend',
+        '<div class="mt-4 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl p-4 text-sm">Could not load configuration. Please ensure <code>config.json</code> is accessible.</div>'
+      );
+      return;
+    }
+
+    injectAll();
+    buildServiceCards();
+    buildArticleCards();
+    buildCarousel();
+    bindForm();
+  });
+
+})();

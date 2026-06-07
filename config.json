@@ -1,0 +1,96 @@
+{
+  "doctor": {
+    "name": "Dr. Arjun Mehta",
+    "title": "Senior Consultant Cardiologist",
+    "degrees": ["MBBS", "MD (Internal Medicine)", "DM (Cardiology)"],
+    "experienceYears": 18,
+    "about": "Dr. Arjun Mehta is a board-certified cardiologist with over 18 years of clinical experience in diagnosing and managing complex cardiovascular conditions. He completed his MBBS from AIIMS Delhi and pursued super-specialisation in Cardiology from PGIMER Chandigarh. Dr. Mehta has authored 30+ peer-reviewed publications and is a recipient of the Young Cardiologist Award (2019). He is committed to delivering compassionate, evidence-based cardiac care with a focus on preventive cardiology and lifestyle intervention.",
+    "consultationFee": 800,
+    "contact": {
+      "phonePrimary": "+91 98765 43210",
+      "phoneSecondary": "+91 87654 32100",
+      "email": "consult@drarjunmehta.com",
+      "address": {
+        "clinic": "Mehta Heart & Wellness Centre",
+        "street": "42, MG Road, Block C",
+        "locality": "Defence Colony",
+        "city": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110024"
+      }
+    },
+    "timings": {
+      "weekdays": "09:00 AM – 05:00 PM",
+      "saturday": "09:00 AM – 01:00 PM",
+      "sunday": "Closed"
+    }
+  },
+  "services": [
+    {
+      "id": "s1",
+      "icon": "fa-heart-pulse",
+      "title": "Cardiac Risk Assessment",
+      "description": "Comprehensive evaluation of cardiovascular risk factors including lipid profiling, stress testing, and advanced imaging for early detection."
+    },
+    {
+      "id": "s2",
+      "icon": "fa-stethoscope",
+      "title": "General Cardiology OPD",
+      "description": "Routine cardiac check-ups, ECG interpretation, Holter monitoring, and management of hypertension, diabetes, and dyslipidaemia."
+    },
+    {
+      "id": "s3",
+      "icon": "fa-echocardiogram",
+      "title": "Echocardiography & Imaging",
+      "description": "2D Echo, Doppler studies, Stress Echo, and TEE performed and interpreted by the consultant in-clinic."
+    },
+    {
+      "id": "s4",
+      "icon": "fa-bolt",
+      "title": "Interventional Cardiology",
+      "description": "Coronary angiography, angioplasty with stent placement, and peripheral vascular interventions performed at partner hospitals."
+    },
+    {
+      "id": "s5",
+      "icon": "fa-lungs",
+      "title": "Pulmonary Hypertension Clinic",
+      "description": "Dedicated evaluation and management of pulmonary arterial hypertension with advanced hemodynamic monitoring."
+    },
+    {
+      "id": "s6",
+      "icon": "fa-apple-whole",
+      "title": "Preventive Cardiology & Wellness",
+      "description": "Personalised lifestyle modification plans, diet counselling, and cardiac rehabilitation programmes for long-term heart health."
+    }
+  ],
+  "articles": [
+    {
+      "id": "a1",
+      "title": "Understanding Hypertension: The Silent Epidemic",
+      "excerpt": "Nearly 1 in 3 Indian adults suffers from high blood pressure. Learn about the causes, complications, and evidence-based management strategies.",
+      "date": "2026-05-20",
+      "url": "#"
+    },
+    {
+      "id": "a2",
+      "title": "5 Heart-Healthy Foods You Must Include in Your Diet",
+      "excerpt": "Simple dietary changes can reduce cardiovascular risk by up to 40%. A cardiologist's guide to incorporating omega-3s, fibre, and antioxidants.",
+      "date": "2026-04-12",
+      "url": "#"
+    },
+    {
+      "id": "a3",
+      "title": "When Should You Get a Cardiac Stress Test?",
+      "excerpt": "Stress testing is not for everyone. Explore the latest ACC/AHA guidelines on appropriate patient selection for exercise and pharmacological stress testing.",
+      "date": "2026-03-05",
+      "url": "#"
+    },
+    {
+      "id": "a4",
+      "title": "Managing Diabetes to Protect Your Heart",
+      "excerpt": "Cardiovascular disease is the leading cause of morbidity in diabetics. A practical framework for glycaemic control and lipid management.",
+      "date": "2026-01-18",
+      "url": "#"
+    }
+  ]
+}
